@@ -183,7 +183,3 @@ gcloud auth list
 - [Crossplane Documentation](https://docs.crossplane.io/)
 - [Terraform GCP Provider](https://registry.terraform.io/providers/hashicorp/google/latest/docs)
 - [GKE Documentation](https://cloud.google.com/kubernetes-engine/docs)
-
-## License
-
-[Specify your license here]
