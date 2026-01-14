@@ -67,11 +67,12 @@ resource "google_compute_router_nat" "nat" {
   }
 }
 resource "google_container_cluster" "primary" {
-  name               = "crossplane-cluster"
-  location           = var.region
-  network            = google_compute_network.primary.name
-  subnetwork         = google_compute_subnetwork.primary.name
-  initial_node_count = 1
+  name                = "crossplane-cluster"
+  location            = var.region
+  network             = google_compute_network.primary.name
+  subnetwork          = google_compute_subnetwork.primary.name
+  initial_node_count  = 1
+  deletion_protection = false
   workload_identity_config {
     workload_pool = "${var.project_id}.svc.id.goog"
   }
@@ -116,7 +117,7 @@ resource "google_project_iam_member" "crossplane_storage_admin" {
 resource "google_service_account_iam_member" "workload_identity_binding" {
   service_account_id = google_service_account.crossplane_sa.name
   role               = "roles/iam.workloadIdentityUser"
-  member             = "serviceAccount:${var.project_id}.svc.id.goog[crossplane-system/provider-gcp-default]"
+  member             = "serviceAccount:${var.project_id}.svc.id.goog[crossplane-system/${kubectl_manifest.provider_gcp.name}]"
 }
 
 resource "helm_release" "crossplane" {
