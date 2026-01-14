@@ -5,6 +5,7 @@ This repository contains infrastructure as code for deploying and managing Cross
 ## Overview
 
 This project sets up:
+
 - A GKE (Google Kubernetes Engine) cluster
 - Crossplane installation via Helm
 - GCP provider configuration for Crossplane
@@ -13,6 +14,7 @@ This project sets up:
 ## Architecture
 
 The infrastructure consists of:
+
 - **GCP Network**: Custom VPC network with subnet
 - **GKE Cluster**: Kubernetes cluster for running Crossplane
 - **Crossplane**: Installed via Helm chart for infrastructure orchestration
@@ -46,16 +48,19 @@ region     = "europe-west1"  # Optional, defaults to europe-west1
 ### Initial Setup
 
 1. **Authenticate with GCP:**
+
    ```bash
    gcloud auth application-default login
    ```
 
 2. **Initialize Terraform:**
+
    ```bash
    terraform init
    ```
 
 3. **Review the deployment plan:**
+
    ```bash
    terraform plan
    ```
@@ -109,6 +114,7 @@ kubectl describe bucket crossplane-test-2026-v1-unique
 ## Resources Created
 
 ### Terraform Resources
+
 - `google_compute_network`: VPC network
 - `google_compute_subnetwork`: Subnet for the GKE cluster
 - `google_container_cluster`: GKE cluster
@@ -116,6 +122,7 @@ kubectl describe bucket crossplane-test-2026-v1-unique
 - `kubectl_manifest`: Crossplane provider configuration
 
 ### Crossplane Resources
+
 - GCP Provider configuration
 - Example: Storage Bucket (bucket.yaml)
 
@@ -143,18 +150,22 @@ terraform destroy
 ## Troubleshooting
 
 ### Crossplane pods not starting
+
 ```bash
 kubectl logs -n crossplane-system -l app=crossplane
 ```
 
 ### Provider configuration issues
+
 ```bash
 kubectl describe providerconfig default
 kubectl get providers
 ```
 
 ### GKE cluster access issues
+
 Ensure your gcloud configuration is correct:
+
 ```bash
 gcloud config list
 gcloud auth list
