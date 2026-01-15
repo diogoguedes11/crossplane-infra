@@ -117,7 +117,7 @@ resource "google_project_iam_member" "crossplane_storage_admin" {
 resource "google_service_account_iam_member" "workload_identity_binding" {
   service_account_id = google_service_account.crossplane_sa.name
   role               = "roles/iam.workloadIdentityUser"
-  member             = "serviceAccount:${var.project_id}.svc.id.goog[crossplane-system/${kubectl_manifest.provider_gcp.name}]"
+  member             = "serviceAccount:${var.project_id}.svc.id.goog[crossplane-system/crossplane-provider-sa]"
 }
 
 resource "helm_release" "crossplane" {
@@ -136,8 +136,18 @@ kind: DeploymentRuntimeConfig
 metadata:
   name: workload-identity-runtimeconfig
 spec:
+  deploymentTemplate:
+    spec:
+      selector: {}
+      template:
+        spec:
+          serviceAccountName: crossplane-provider-sa
+          containers:
+            - name: package-runtime
+              args: []
   serviceAccountTemplate:
     metadata:
+      name: crossplane-provider-sa
       annotations:
         iam.gke.io/gcp-service-account: ${google_service_account.crossplane_sa.email}
 YAML
@@ -157,6 +167,18 @@ spec:
 YAML
 }
 
+resource "kubectl_manifest" "provider_gcp_sql" {
+  yaml_body = <<YAML
+apiVersion: pkg.crossplane.io/v1
+kind: Provider
+metadata:
+  name: provider-gcp-sql
+spec:
+  package: xpkg.upbound.io/upbound/provider-gcp-sql:v2.1.0
+  runtimeConfigRef:
+    name: workload-identity-runtimeconfig
+YAML
+}
 # Auth configuration
 resource "kubectl_manifest" "provider_config" {
   yaml_body = <<YAML

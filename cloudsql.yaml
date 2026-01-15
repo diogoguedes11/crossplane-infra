@@ -1,0 +1,29 @@
+apiVersion: sql.gcp.upbound.io/v1beta1
+kind: DatabaseInstance
+metadata:
+  name: example-instance
+  labels:
+    testing.upbound.io/example-name: example-instance
+spec:
+  forProvider:
+    databaseVersion: POSTGRES_15
+    deletionProtection: false
+    region: europe-west1
+    settings:
+      - tier: db-f1-micro
+        ipConfiguration:
+          - ipv4Enabled: true
+  providerConfigRef:
+    name: default
+---
+apiVersion: sql.gcp.upbound.io/v1beta1
+kind: Database
+metadata:
+  name: example-database
+spec:
+  forProvider:
+    instanceSelector:
+      matchLabels:
+        testing.upbound.io/example-name: example-instance
+  providerConfigRef:
+    name: default

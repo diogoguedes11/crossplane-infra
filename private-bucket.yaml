@@ -1,12 +1,12 @@
-# bucket.yaml
 apiVersion: storage.gcp.upbound.io/v1beta1
 kind: Bucket
 metadata:
-  name: crossplane-test-2026-v1-unique
+  name: crossplane-private-bucket-example1105
 spec:
   forProvider:
     location: EU
     forceDestroy: true
     uniformBucketLevelAccess: true
+    publicAccessPrevention: enforced
   providerConfigRef:
     name: default

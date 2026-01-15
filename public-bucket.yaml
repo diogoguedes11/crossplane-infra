@@ -1,0 +1,13 @@
+# bucket.yaml
+apiVersion: storage.gcp.upbound.io/v1beta1
+kind: Bucket
+metadata:
+  name: crossplane-public-bucket-example
+spec:
+  forProvider:
+    location: EU
+    forceDestroy: true
+    uniformBucketLevelAccess: true
+    publicAccessPrevention: inherited
+  providerConfigRef:
+    name: default
